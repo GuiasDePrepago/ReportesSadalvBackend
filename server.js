@@ -6,6 +6,7 @@ const fs = require('fs')
 const pdfParse = require('pdf-parse')
 const base64 = require('base64topdf');
 const util = require('util');
+require('dotenv').config();
 
 const app = express();
 
@@ -14,10 +15,10 @@ app.use(express.urlencoded({limit: '50mb'}));
 app.use(cors());
 
 const db = mysql.createPool({
-    host: '20.85.240.25',
-    database: 'reportessadalv_qa',
-    user: 'jsilva',
-    password: 'Admin12345'
+    host: process.env.DB_HOST,
+    database: process.env.DB,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 });
 
 const getPDF = async (file) => {
