@@ -147,11 +147,6 @@ app.post('/login', (req, res) => {
         }
     });
 
-    if (tipoGuia[0] = "Terrestre") {
-        if (guiaBase[0] == '5') {
-            guiaBase[0] = '1';
-        }
-    }
 
     if (cuentaBancaria == 'LOGISTICA EMPRESARIAL MEGAMENTE (2889)(8892)' || cuentaBancaria == 'REPOSICION' || cuentaBancaria == 'OXXO MEGAMENTE') {
         if (tipoGuia[0] == "Express") {
@@ -280,9 +275,13 @@ app.post('/login', (req, res) => {
     }
 
     for (let i=0; i < kilos.length; i++) {
-        
-            kilosAdicionales.push(parseInt(kilos[i]) - parseInt(guiaBase[i]));
-        
+            kilosAdicionales.push(parseInt(kilos[i]) - parseInt(guiaBase[i]));   
+    }
+
+    if (tipoGuia[0] = "Terrestre") {
+        if (guiaBase[0] == '5') {
+            guiaBase[0] = '1';
+        }
     }
 
     fs.unlink('guia.pdf', (err) => {
