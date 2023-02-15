@@ -281,6 +281,7 @@ app.post('/login', (req, res) => {
     if (tipoGuia[0] = "Terrestre") {
         if (guiaBase[0] == '5') {
             guiaBase[0] = '1';
+            kilosAdicionales[0] = '5';
         }
     }
 
