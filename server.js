@@ -147,7 +147,7 @@ app.post('/login', (req, res) => {
     });
 
     if (tipoGuia[0] == "Terrestre") {
-        if (numerosConfirmacion[0].slice(1, 3).replace('0', '') == '1') {
+        if (numerosConfirmacion[0].slice(1, 3).replace('0', '') == 1) {
             guiaBase.push("1");
         } else {
             guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
