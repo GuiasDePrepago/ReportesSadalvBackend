@@ -110,6 +110,7 @@ app.post('/login', (req, res) => {
 
     numerosConfirmacion.push([...pdfText.matchAll(regexConfirmacion)].toString().replace('-', ''))
     
+    guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
 
     remitente.push([...pdfText.matchAll(regexRemitente)].toString());
     destinatario.push([...pdfText.matchAll(regexDestinatario)].toString());
@@ -143,19 +144,14 @@ app.post('/login', (req, res) => {
         if (numeroConfirmacion.slice(13, 14) == '7') {
             tipoGuia.push("Terrestre");
             return
-        }    
+        }
     });
 
-    if (tipoGuia[0] == "Terrestre") {
-        if (numerosConfirmacion[0].slice(1, 3).replace('0', '') == 1) {
-            guiaBase.push("1");
-        } else {
-            guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
+    if (tipoGuia[0] = "Terrestre") {
+        if (guiaBase[0] == '5') {
+            guiaBase[0] = '1';
         }
-    } else {
-        guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
     }
-
 
     if (cuentaBancaria == 'LOGISTICA EMPRESARIAL MEGAMENTE (2889)(8892)' || cuentaBancaria == 'REPOSICION' || cuentaBancaria == 'OXXO MEGAMENTE') {
         if (tipoGuia[0] == "Express") {
