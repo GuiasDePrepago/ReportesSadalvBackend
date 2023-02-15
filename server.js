@@ -110,7 +110,6 @@ app.post('/login', (req, res) => {
 
     numerosConfirmacion.push([...pdfText.matchAll(regexConfirmacion)].toString().replace('-', ''))
     
-    guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
 
     remitente.push([...pdfText.matchAll(regexRemitente)].toString());
     destinatario.push([...pdfText.matchAll(regexDestinatario)].toString());
@@ -124,7 +123,7 @@ app.post('/login', (req, res) => {
         }
 
         if (numeroConfirmacion.slice(3, 10) == '5903104') {
-            cuenta.push("3104 ANGELICA HDZ");
+            cuenta.push("3104  ICA HDZ");
             return
         }
 
@@ -144,9 +143,20 @@ app.post('/login', (req, res) => {
         if (numeroConfirmacion.slice(13, 14) == '7') {
             tipoGuia.push("Terrestre");
             return
-        }
-        
+        }    
     });
+
+    if (tipoGuia == "Terrestre") {
+        if (numerosConfirmacion[0].slice(1, 3).replace('0', '') == 1) {
+            guiaBase.push("5");
+        } else {
+            guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
+        }
+    } else {
+        guiaBase.push(numerosConfirmacion[0].slice(1, 3).replace('0', ''));
+    }
+
+
     if (cuentaBancaria == 'LOGISTICA EMPRESARIAL MEGAMENTE (2889)(8892)' || cuentaBancaria == 'REPOSICION' || cuentaBancaria == 'OXXO MEGAMENTE') {
         if (tipoGuia[0] == "Express") {
             if (kilos[0].slice(0, -3) == 1) {
@@ -185,7 +195,7 @@ app.post('/login', (req, res) => {
         }
     
         if (tipoGuia[0] == "Terrestre") {
-            if (kilos[0].slice(0, -3) == 5) {
+            if (kilos[0].slice(0, -3) > 0 && kilos[0].slice(0, -3) <= 5) {
                 costoGuia.push('150');
             }
             if (kilos[0].slice(0, -3) > 5 && kilos[0].slice(0, -3) <= 10) {
