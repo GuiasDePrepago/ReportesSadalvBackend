@@ -344,26 +344,114 @@ app.post('/login', (req, res) => {
     deposito, hora, reexpedicion, factura, razonSocial, remitente[0], guiaBase[0],'' + kilosAdicionales, comentarios,
     costoGuia[0], credito, clienteCredito, costoReexpedicion, destinatario[0], clientePrepago, creditoMontoDepositado, creditoEstado]]
 
-    db.query(
-        `INSERT INTO reporte 
-        (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
-        fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
-        empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
-        razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
-        cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
-        [values],
-        (err, res) => {
-            if (err) {
-                console.log(err);
-            }
+    // db.query(
+    //     `INSERT INTO reporte 
+    //     (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
+    //     fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
+    //     empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
+    //     razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
+    //     cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
+    //     [values],
+    //     (err, res) => {
+    //         if (err) {
+    //             console.log(err);
+    //         }
 
-            console.log(res);
-        }
-    );
+    //         console.log(res);
+    //     }
+    // );
 
 
-    res.status(200).send({message: "hi"})
+    res.status(200).send({
+        codigo_confirmacion: numerosConfirmacion[0], 
+        kilos: kilos[0],
+        vendedor: vendedor, 
+        cuenta: cuenta[0], 
+        nombre_archivo: nombreArchivo, 
+        fecha_creacion: fechaCreacion,
+        idCargaArchivos: idCargaArchivos,
+        tipo_guia: tipoGuia, 
+        generador: generador, 
+        empresa: empresa, 
+        cuenta_bancaria: cuentaBancaria, 
+        referencia: referencia, 
+        monto_deposito: deposito, 
+        reexpedicion: reexpedicion, 
+        facturar: factura,
+        razon_social: razonSocial, 
+        remitente: remitente, 
+        guia_base: guiaBase, 
+        kilos_adicionales: kilosAdicionales, 
+        comentarios: comentarios, 
+        costo_guia: costoGuia, 
+        credito: credito,
+        cliente_credito: clienteCredito, 
+        costo_reexpedicion: costoReexpedicion, 
+        destinatario: destinatario, 
+        cliente_prepago: clientePrepago, 
+        credito_monto_depositado: creditoMontoDepositado, 
+        credito_estado: creditoEstado })
 
   });
+
+  app.post('/confirmReporte', async (req, res) => {
+        const codigo_confirmacion = req.body.codigo_confirmacion; 
+        const kilos = req.body.kilos;
+        const vendedor = req.body.vendedor; 
+        const cuenta = req.body.cuenta; 
+        const nombre_archivo = req.body.nombre_archivo; 
+        const fecha_creacion = req.body.fecha_creacion;
+        const idCargaArchivos = req.body.idCargaArchivos;
+        const tipo_guia = req.body.tipo_guia; 
+        const generador = req.body.generador; 
+        const empresa = req.body.empresa; 
+        const cuenta_bancaria = req.body.cuenta_bancaria; 
+        const referencia = req.body.referencia; 
+        const monto_deposito = req.body.monto_deposito; 
+        const reexpedicion = req.body.reexpedicion ? "Si" : "No"; 
+        const factura = req.body.factura;
+        const razon_social = req.body.razon_social; 
+        const remitente = req.body.remitente; 
+        const guia_base = req.body.guia_base; 
+        const kilos_adicionales = req.body.kilos_adicionales; 
+        const comentarios = req.body.comentarios; 
+        const costo_guia = req.body.costo_guia; 
+        const credito = req.body.credito;
+        const cliente_credito = req.body.cliente_credito; 
+        const costo_reexpedicion = req.body.reexpedicion? req.body.costo_reexpedicion : '0.00'; 
+        const destinatario = req.body.destinatario; 
+        const cliente_prepago = req.body.cliente_prepago; 
+        const credito_monto_depositado = req.body.credito_monto_depositado; 
+        const credito_estado = req.body.credito_estado;
+
+        const values = [[codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion, 
+        fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia, generador, empresa, cuenta_bancaria, referencia,
+        monto_deposito, '0:00', reexpedicion, factura, razon_social, remitente, guia_base,'' + kilos_adicionales, comentarios,
+        costo_guia, credito, cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado]]
+
+        console.log(values)
+        db.query(
+            `INSERT INTO reporte 
+            (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
+            fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
+            empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
+            razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
+            cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
+            [values],
+            (err, res) => {
+                if (err) {
+                    console.log(err);
+                }
+
+                console.log('enviado con exito');
+            }
+        );
+
+         res.status(200).send({
+             message: 'exito'
+    
+       });
+
+  })
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080'));
