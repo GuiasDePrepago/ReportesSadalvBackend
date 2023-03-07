@@ -28,7 +28,7 @@ const getPDF = async (file) => {
         let pdfExtract = await pdfParse(readFileSync)
         return pdfExtract.text;
     } catch (error) {
-        throw new Error(error)
+        next(error)
     }
 }
 
