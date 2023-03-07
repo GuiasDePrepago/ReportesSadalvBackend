@@ -230,7 +230,7 @@ app.post('/login', (req, res) => {
                 clienteCredito,
                 (err, res) => {
                     if (err) {
-                        reject(err);
+                        console.log(err);
                     }
 
                     resolve(res);
@@ -256,7 +256,7 @@ app.post('/login', (req, res) => {
                 clientePrepago,
                 (err, res) => {
                     if (err) {
-                        reject(err);
+                        console.log(err);
                     }
 
                     resolve(res);
@@ -301,7 +301,7 @@ app.post('/login', (req, res) => {
             `SELECT MAX(id_carga_archivos) FROM reporte;`,
             (err, res) => {
                 if (err) {
-                    reject(err);
+                    console.log(err);
                 }
 
                 resolve(res);
