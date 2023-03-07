@@ -290,7 +290,7 @@ app.post('/login', (req, res) => {
 
     fs.unlink('guia.pdf', (err) => {
         if (err) {
-            throw err;
+            console.log(err);
         }
     
         console.log("Delete File successfully.");
