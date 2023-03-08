@@ -28,7 +28,7 @@ const getPDF = async (file) => {
         let pdfExtract = await pdfParse(readFileSync)
         return pdfExtract.text;
     } catch (error) {
-        next(error)
+        throw new Error(error)
     }
 }
 
@@ -230,7 +230,7 @@ app.post('/login', (req, res) => {
                 clienteCredito,
                 (err, res) => {
                     if (err) {
-                        console.log(err);
+                        reject(err);
                     }
 
                     resolve(res);
@@ -256,7 +256,7 @@ app.post('/login', (req, res) => {
                 clientePrepago,
                 (err, res) => {
                     if (err) {
-                        console.log(err);
+                        reject(err);
                     }
 
                     resolve(res);
@@ -290,7 +290,7 @@ app.post('/login', (req, res) => {
 
     fs.unlink('guia.pdf', (err) => {
         if (err) {
-            console.log(err);
+            throw err;
         }
     
         console.log("Delete File successfully.");
@@ -301,7 +301,7 @@ app.post('/login', (req, res) => {
             `SELECT MAX(id_carga_archivos) FROM reporte;`,
             (err, res) => {
                 if (err) {
-                    console.log(err);
+                    reject(err);
                 }
 
                 resolve(res);
