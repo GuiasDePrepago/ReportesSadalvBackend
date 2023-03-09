@@ -107,7 +107,6 @@ app.post('/login', (req, res) => {
     let regexConfirmacion = /\w{10}-\w{12}/g;
     let regexKilos = /.*KG/g;
 
-
     numerosConfirmacion = ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
     
     guiaBase = numerosConfirmacion.map(s => s.slice(1, 3).replace('0', ''));
@@ -152,69 +151,90 @@ app.post('/login', (req, res) => {
             if (tipoGuia[i] == "Express") {
                 if (kilos[i].slice(0, -2) == 1) {
                     costoGuia.push('150');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 1 && kilos[i].slice(0, -2) <= 5) {
                     costoGuia.push('240');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 5 && kilos[i].slice(0, -2) <= 10) {
                     costoGuia.push('350');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 10 && kilos[i].slice(0, -2) <= 15) {
                     costoGuia.push('460');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 15 && kilos[i].slice(0, -2) <= 20) {
                     costoGuia.push('570');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 20 && kilos[i].slice(0, -2) <= 25) {
                     costoGuia.push('685');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 25 && kilos[i].slice(0, -2) <= 30) {
                     costoGuia.push('795');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 30 && kilos[i].slice(0, -2) <= 35) {
                     costoGuia.push('905');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 35 && kilos[i].slice(0, -2) <= 40) {
                     costoGuia.push('1020');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 40 && kilos[i].slice(0, -2) <= 45) {
                     costoGuia.push('1125');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 45 && kilos[i].slice(0, -2) <= 50) {
                     costoGuia.push('1240');
+                    break
                 }
             }
 
             if (tipoGuia[i] == "Terrestre") {
                 if (kilos[i].slice(0, -2) > 0 && kilos[i].slice(0, -2) <= 5) {
                     costoGuia.push('150');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 5 && kilos[i].slice(0, -2) <= 10) {
                     costoGuia.push('200');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 10 && kilos[i].slice(0, -2) <= 15) {
                     costoGuia.push('225');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 15 && kilos[i].slice(0, -2) <= 20) {
                     costoGuia.push('250');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 20 && kilos[i].slice(0, -2) <= 25) {
                     costoGuia.push('275');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 25 && kilos[i].slice(0, -2) <= 30) {
                     costoGuia.push('310');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 30 && kilos[i].slice(0, -2) <= 35) {
                     costoGuia.push('350');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 35 && kilos[i].slice(0, -2) <= 40) {
                     costoGuia.push('375');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 40 && kilos[i].slice(0, -2) <= 45) {
                     costoGuia.push('415');
+                    break
                 }
                 if (kilos[i].slice(0, -2) > 45 && kilos[i].slice(0, -2) <= 50) {
                     costoGuia.push('455');
+                    break
                 }
             }
         }   
@@ -309,60 +329,11 @@ app.post('/login', (req, res) => {
         );
     })
     idCargaArchivos = Object.values(getIdCargaArchivos[0])[0] + 1;
-    
-    // console.log("no. confirmacion: " + numerosConfirmacion);
-    // console.log("Kilos: " + kilos);
-    // console.log("vendedor: " + vendedor)
-    // console.log("Cuenta: " + cuenta);
-    // console.log("Nombre de archivo: " + nombreArchivo);
-    // console.log("fecha de creacion: " + date + " " + hora)
-    // console.log("fecha de actualizacion: " + date + " " + hora)
-    // console.log("fecha de vendedor: " + date + " " + hora)
-    // console.log("id de carga de archivos: " + toString(idCargaArchivos));
-    // console.log("Tipo de guia: " + tipoGuia);
-    // console.log("Generador: " + generador);
-    // console.log("Empresa: " + empresa)
-    // console.log("Cuenta bancaria: " + cuentaBancaria)
-    // console.log("Referencia: " + referencia)
-    // console.log("Monto deposito: " + deposito)
-    // console.log("Hora: " + hora)
-    // console.log("Reexpedicion: " + reexpedicion)
-    // console.log("Facturar: " + factura)
-    // console.log("Razon social: " + razonSocial)
-    // console.log("Remitente: " + remitente);
-    // console.log("guia base: " + guiaBase);
-    // console.log("Kilos adicionales: " + kilosAdicionales);
-    // console.log("Comentarios: " + comentarios);
-    // console.log("Costo Guia: " + costoGuia); 
-    // console.log("Credito: " + credito)
-    // console.log("Cliente Credito: " + clienteCredito);
-    // console.log("Costo Reexpedicion: " + costoReexpedicion);
-    // console.log("Destinatario: " + destinatario);
-    // console.log("Cliente Prepago: " + clientePrepago);
-    // console.log("Credito Estado: " + creditoEstado);
-    // console.log("Credito monto depositado: " + creditoMontoDepositado);
 
     const values = [[numerosConfirmacion[0], kilos[0], vendedor, cuenta[0], nombreArchivo, fechaCreacion, 
     fechaCreacion, fechaCreacion, '' + idCargaArchivos, tipoGuia[0], generador, empresa, cuentaBancaria, referencia,
     deposito, hora, reexpedicion, factura, razonSocial, remitente[0], guiaBase[0],'' + kilosAdicionales, comentarios,
     costoGuia[0], credito, clienteCredito, costoReexpedicion, destinatario[0], clientePrepago, creditoMontoDepositado, creditoEstado]]
-
-    // db.query(
-    //     `INSERT INTO reporte 
-    //     (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
-    //     fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
-    //     empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
-    //     razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
-    //     cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
-    //     [values],
-    //     (err, res) => {
-    //         if (err) {
-    //             console.log(err);
-    //         }
-
-    //         console.log(res);
-    //     }
-    // );
 
 
     res.status(200).send({
@@ -397,6 +368,8 @@ app.post('/login', (req, res) => {
 
   });
 
+
+
   app.post('/confirmReporte', async (req, res) => {
         const codigo_confirmacion = req.body.codigo_confirmacion; 
         const kilos = req.body.kilos;
@@ -427,38 +400,45 @@ app.post('/login', (req, res) => {
         const credito_monto_depositado = req.body.credito_monto_depositado; 
         const credito_estado = req.body.credito_estado;
         console.log(costo_reexpedicion)
-        
-        for (let i = 0; i < codigo_confirmacion.length; i++) {
 
-            const values = [[codigo_confirmacion[i], kilos[i], vendedor, cuenta[i], nombre_archivo, fecha_creacion, 
-                fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia[i], generador, empresa, cuenta_bancaria, referencia,
-                monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
-                costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, credito_monto_depositado, credito_estado]]
-        
-            db.query(
-                `INSERT INTO reporte 
-                (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
-                fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
-                empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
-                razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
-                cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
-                [values],
-                (err, res) => {
-                    if (err) {
-                        console.log(err);
-                    }
+        try {
+            for (let i = 0; i < codigo_confirmacion.length; i++) {
     
-                    console.log('enviado con exito');
-                }
-            );
+                const values = [[codigo_confirmacion[i], kilos[i], vendedor, cuenta[i], nombre_archivo, fecha_creacion, 
+                    fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia[i], generador, empresa, cuenta_bancaria, referencia,
+                    monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
+                    costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, credito_monto_depositado, credito_estado]]
             
-
-        }
-
-         res.status(200).send({
-             message: 'exito'
+                db.query(
+                    `INSERT INTO reporte 
+                    (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
+                    fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
+                    empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
+                    razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
+                    cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
+                    [values],
+                    (err, res) => {
+                        if (err) {
+                            throw(err);
+                        }
+        
+                        console.log('enviado con exito');
+                    }
+                );
+                
     
-       });
+            }
+            
+            
+            res.status(200).send({
+                message: 'exito'
+                
+            });
+        } 
+
+        catch {
+            console.log(error)
+        }
 
   })
 
