@@ -107,7 +107,12 @@ app.post('/login', (req, res) => {
     let regexConfirmacion = /\w{10}-\w{12}/g;
     let regexKilos = /.*KG/g;
 
-    numerosConfirmacion = ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
+    try{
+        numerosConfirmacion = ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
+    }
+    catch {
+        console.log(error)
+    }
     
     guiaBase = numerosConfirmacion.map(s => s.slice(1, 3).replace('0', ''));
 
