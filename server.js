@@ -110,7 +110,7 @@ app.post('/login', (req, res) => {
     try{
         numerosConfirmacion = ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
     }
-    catch {
+    catch (error) {
         console.log(error)
     }
     
