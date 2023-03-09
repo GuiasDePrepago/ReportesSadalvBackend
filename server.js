@@ -108,7 +108,7 @@ app.post('/login', (req, res) => {
     let regexKilos = /.*KG/g;
 
     try{
-        numerosConfirmacion = ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
+        numerosConfirmacion = await ([...pdfText.matchAll(regexConfirmacion)].toString().replaceAll('-','').split(','));
     }
     catch (error) {
         console.log(error)
@@ -118,7 +118,7 @@ app.post('/login', (req, res) => {
 
     remitente = ([...pdfText.matchAll(regexRemitente)].toString().split(','));
     destinatario = ([...pdfText.matchAll(regexDestinatario)].toString().split(','));
-    kilos = ([...pdfText.matchAll(regexKilos)].toString().replaceAll(' KG', '').split(','));
+    kilos = await ([...pdfText.matchAll(regexKilos)].toString().replaceAll(' KG', '').split(','));
 
     numerosConfirmacion.map((numeroConfirmacion) => {
         
@@ -315,7 +315,7 @@ app.post('/login', (req, res) => {
 
     fs.unlink('guia.pdf', (err) => {
         if (err) {
-            throw err;
+            console.log(err);
         }
     
         console.log("Delete File successfully.");
