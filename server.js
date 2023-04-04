@@ -425,7 +425,7 @@ app.post('/login', (req, res) => {
          const referencia = req.body.referencia; 
          let monto_deposito = req.body.monto_deposito; 
          const reexpedicion = req.body.reexpedicion; 
-         const factura = req.body.factura;
+         const factura = req.body.facturar;
          const razon_social = req.body.razon_social; 
          const remitente = req.body.remitente; 
          const guia_base = req.body.guia_base; 
@@ -440,7 +440,7 @@ app.post('/login', (req, res) => {
          const cliente_prepago_id = req.body.cliente_prepago_id || null;
          const credito_monto_depositado = req.body.credito_monto_depositado; 
          const credito_estado = req.body.credito_estado;
-         console.log(costo_reexpedicion)
+         console.log(factura)
 
          try {
              for (let i = 0; i < codigo_confirmacion.length; i++) {
