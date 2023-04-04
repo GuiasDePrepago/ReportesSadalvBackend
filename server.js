@@ -79,7 +79,7 @@ app.post('/login', (req, res) => {
      const clientePrepago = req.body.clientePrepago;
      const clientePrepagoID = req.body.clientePrepagoID;
      const comentarios = req.body.comentarios;
-     const costoGuia = [];
+     let costoGuia = [];
      const encodedPdf = req.body.pdf;
      const nombreArchivo = req.body.fileName
      let numerosConfirmacion = [];
@@ -296,12 +296,13 @@ app.post('/login', (req, res) => {
          })
          
          if (JSON.parse(clientes[0].precio_especial) == '1') {
+            costoGuia = [];
              if (tipoGuia[0] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -3)).val)
+                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -2)).val)
              }
 
              if (tipoGuia[0] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -3)).val)
+                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -2)).val)
              } 
          }
      }
@@ -322,12 +323,13 @@ app.post('/login', (req, res) => {
          })
          
          if (JSON.parse(clientes[0].precio_especial) == '1') {
+            costoGuia = [];
              if (tipoGuia[0] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -3)).val)
+                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -2)).val)
              }
 
              if (tipoGuia[0] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -3)).val)
+                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -2)).val)
              } 
          }
      }
@@ -371,12 +373,8 @@ app.post('/login', (req, res) => {
      })
      idCargaArchivos = Object.values(getIdCargaArchivos[0])[0] + 1;
 
-     const values = [[numerosConfirmacion[0], kilos[0], vendedor, cuenta[0], nombreArchivo, fechaCreacion, 
-     fechaCreacion, fechaCreacion, '' + idCargaArchivos, tipoGuia[0], generador, empresa, cuentaBancaria, referencia,
-     deposito, hora, reexpedicion, factura, razonSocial, remitente[0], guiaBase[0],'' + kilosAdicionales, comentarios,
-     costoGuia[0], credito, clienteCredito, costoReexpedicion, destinatario[0], clientePrepago, creditoMontoDepositado, creditoEstado]]
-
-     console.log(clientePrepagoID)
+     console.log( kilos[0].slice(0, -2))
+     console.log(costoGuia)
      res.status(200).send({
          codigo_confirmacion: numerosConfirmacion, 
          kilos: kilos,
