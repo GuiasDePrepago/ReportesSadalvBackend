@@ -64,6 +64,7 @@ app.post('/login', (req, res) => {
     )
     });
 
+
  app.post('/subirReporte', async (req, res) => {
      const date = req.body.date;
      const generador = req.body.generador;
@@ -153,7 +154,7 @@ app.post('/login', (req, res) => {
 
 
     for (let i = 0; i < tipoGuia.length; i++) {
-        if (tipoGuia[i] == "Express" && cuentaBancaria != 'CREDITO' && cuentaBancaria != 'PREPAGO') {
+        if (tipoGuia[i] == "Express") {
             if (kilos[i].slice(0, -2) == 1) {
                 costoGuia.push('150');
                 
@@ -216,7 +217,7 @@ app.post('/login', (req, res) => {
             }
         }
 
-        if (tipoGuia[i] == "Terrestre" && cuentaBancaria != 'CREDITO' && cuentaBancaria != 'PREPAGO') {
+        if (tipoGuia[i] == "Terrestre") {
             if (kilos[i].slice(0, -2) > 0 && kilos[i].slice(0, -2) <= 5) {
                 costoGuia.push('150');
                 
@@ -298,11 +299,11 @@ app.post('/login', (req, res) => {
          if (JSON.parse(clientes[0].precio_especial) == '1') {
             
              if (tipoGuia[i] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val)
+                 costoGuia[i] = JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val
              }
 
              if (tipoGuia[i] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val)
+                costoGuia[i] = JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val
              } 
          }
      }
@@ -325,11 +326,11 @@ app.post('/login', (req, res) => {
          if (JSON.parse(clientes[0].precio_especial) == '1') {
             
              if (tipoGuia[i] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val)
+                costoGuia[i] = JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val
              }
 
              if (tipoGuia[i] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val)
+                costoGuia[i] = JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val
              } 
          }
      }
