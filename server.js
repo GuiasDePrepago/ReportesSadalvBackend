@@ -153,7 +153,7 @@ app.post('/login', (req, res) => {
 
 
     for (let i = 0; i < tipoGuia.length; i++) {
-        if (tipoGuia[i] == "Express") {
+        if (tipoGuia[i] == "Express" && cuentaBancaria != 'CREDITO' && cuentaBancaria != 'PREPAGO') {
             if (kilos[i].slice(0, -2) == 1) {
                 costoGuia.push('150');
                 
@@ -216,7 +216,7 @@ app.post('/login', (req, res) => {
             }
         }
 
-        if (tipoGuia[i] == "Terrestre") {
+        if (tipoGuia[i] == "Terrestre" && cuentaBancaria != 'CREDITO' && cuentaBancaria != 'PREPAGO') {
             if (kilos[i].slice(0, -2) > 0 && kilos[i].slice(0, -2) <= 5) {
                 costoGuia.push('150');
                 
@@ -276,7 +276,7 @@ app.post('/login', (req, res) => {
         }
     }   
 
-    
+    for (let i = 0; i < tipoGuia.length; i++) {
 
      if (cuentaBancaria == 'CREDITO') {
          credito = 'Si'
@@ -294,15 +294,15 @@ app.post('/login', (req, res) => {
                  }
              );
          })
-         
+         console.log(clientes[0].precio)
          if (JSON.parse(clientes[0].precio_especial) == '1') {
-            costoGuia = [];
-             if (tipoGuia[0] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -2)).val)
+            
+             if (tipoGuia[i] == "Express") {
+                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val)
              }
 
-             if (tipoGuia[0] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -2)).val)
+             if (tipoGuia[i] == "Terrestre") {
+                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val)
              } 
          }
      }
@@ -323,16 +323,17 @@ app.post('/login', (req, res) => {
          })
          
          if (JSON.parse(clientes[0].precio_especial) == '1') {
-            costoGuia = [];
-             if (tipoGuia[0] == "Express") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[0].slice(0, -2)).val)
+            
+             if (tipoGuia[i] == "Express") {
+                 costoGuia.push(JSON.parse(clientes[0].precio).express.find(element => element.id == kilos[i].slice(0, -2)).val)
              }
 
-             if (tipoGuia[0] == "Terrestre") {
-                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[0].slice(0, -2)).val)
+             if (tipoGuia[i] == "Terrestre") {
+                 costoGuia.push(JSON.parse(clientes[0].precio).terrestre.find(element => element.id == kilos[i].slice(0, -2)).val)
              } 
          }
      }
+    }
 
      for (let i=0; i < kilos.length; i++) {
              kilosAdicionales.push(parseInt(kilos[i]) - parseInt(guiaBase[i]));   
@@ -373,8 +374,9 @@ app.post('/login', (req, res) => {
      })
      idCargaArchivos = Object.values(getIdCargaArchivos[0])[0] + 1;
 
-     console.log( kilos[0].slice(0, -2))
-     console.log(costoGuia)
+     console.log(kilos[0].slice(0, -2));
+     console.log(costoGuia);
+
      res.status(200).send({
          codigo_confirmacion: numerosConfirmacion, 
          kilos: kilos,
@@ -438,9 +440,29 @@ app.post('/login', (req, res) => {
          const cliente_prepago_id = req.body.cliente_prepago_id || null;
          const credito_monto_depositado = req.body.credito_monto_depositado; 
          const credito_estado = req.body.credito_estado;
-         console.log(factura)
 
          try {
+
+            let checkRepeated = [];
+
+                db.query(
+                    `SELECT * FROM reporte WHERE codigo_confirmacion = ?;`,
+                    codigo_confirmacion,
+                    (err, res) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        setValue(res);
+                    }
+                );
+
+                function setValue(value) {
+                    checkRepeated = value;
+                  }
+            
+            console.log(checkRepeated)
+            
+            if (checkRepeated.length < 1) {
              for (let i = 0; i < codigo_confirmacion.length; i++) {
                 if (i >= 1) {
                     monto_deposito = '0.00'
@@ -450,7 +472,8 @@ app.post('/login', (req, res) => {
                      fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia[i], generador, empresa, cuenta_bancaria, referencia,
                      monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
                      costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, cliente_prepago_id, credito_monto_depositado, credito_estado]]
-                 db.query(
+                 
+                db.query(
                      `INSERT INTO reporte 
                      (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
                      fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
@@ -475,6 +498,11 @@ app.post('/login', (req, res) => {
                  message: 'exito'
                 
              });
+            } else {
+                res.status(202).send({
+                    message: "checkRepeated"
+                })
+            }
          } 
 
          catch (error){
