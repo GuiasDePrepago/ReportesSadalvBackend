@@ -64,6 +64,101 @@ app.post('/login', (req, res) => {
     )
     });
 
+app.get('/generadores', (req, res) => {
+    db.query(
+        "SELECT * FROM generadores WHERE activo = 1",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/vendedores', (req, res) => {
+    db.query(
+        "SELECT * FROM vendedores WHERE activo = 1",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/cuentasBancarias', (req, res) => {
+    db.query(
+        "SELECT * FROM cuentas_bancarias WHERE activo = 1",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/clientesCredito', (req, res) => {
+    db.query(
+        "SELECT * FROM clientes_credito WHERE activo = 1",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/clientesPrepago', (req, res) => {
+    db.query(
+        "SELECT * FROM clientes_prepago",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/clientesFacturacion', (req, res) => {
+    db.query(
+        "SELECT * FROM clientes_facturacion WHERE activo = 1",
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
 
  app.post('/subirReporte', async (req, res) => {
      const date = req.body.date;
