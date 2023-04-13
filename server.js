@@ -160,6 +160,22 @@ app.get('/clientesFacturacion', (req, res) => {
     )
 });
 
+app.post('/errores', async (req, res) => {
+    const codigoConfirmacion = req.body.codigoConfirmacion;
+
+    db.query(
+        "DELETE FROM reporte WHERE codigo_confirmacion = ?",
+        [codigoConfirmacion],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+            res.status(200).send({ message: 'Error procesado' });
+            
+        }    
+    )
+});
+
  app.post('/subirReporte', async (req, res) => {
      const date = req.body.date;
      const generador = req.body.generador;
