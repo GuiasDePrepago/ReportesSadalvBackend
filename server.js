@@ -234,6 +234,11 @@ app.post('/errores', async (req, res) => {
      kilos = await ([...pdfText.matchAll(regexKilos)].toString().replaceAll(' KG', '').split(','));
 
      numerosConfirmacion.map((numeroConfirmacion) => {
+
+        if (numeroConfirmacion.slice(3, 10) === '5898972') {
+            cuenta.push("8972 PRIVANZA CONSUMO");
+             return
+        }
         
          if (numeroConfirmacion.slice(3, 10) === '5892303') {
              cuenta.push("2303 Ventro");
