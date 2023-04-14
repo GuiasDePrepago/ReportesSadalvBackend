@@ -561,20 +561,22 @@ app.post('/errores', async (req, res) => {
 
         if (generador == "ALEJANDRA IBARRA") {
             generadorId = 5;
-            return
+            
         }
         if (generador == "MICHELL") {
             generadorId = 3;
-            return
+            
         }
         if (generador == "CITLALLI ROCHA") {
             generadorId = 8;
-            return
+            
         } 
         if (generador == "ERICK GARCIA") {
             generadorId = 4;
-            return
+            
         } 
+
+        console.log(generadorId)
 
          try {
 
@@ -623,17 +625,18 @@ app.post('/errores', async (req, res) => {
                          if (err) {
                              throw(err);
                          }
-                         if (cuenta_bancaria == 'PREPAGO') {
-                         db.query(`INSERT INTO saldos (id_cliente, fecha_creacion, monto, creado_por, tipo, observaciones,
-                            tipo_cliente, cuenta_bancaria, referencia) VALUES ?`,
-                            [values_prepago],
-                            (err, res) => {
-                                if (err) {
-                                    throw(err);
-                                }
-                            })}
                      }
                  );
+
+                  if (cuenta_bancaria == 'PREPAGO') {
+                     db.query(`INSERT INTO saldos (id_cliente, fecha_creacion, monto, creado_por, tipo, observaciones,
+                        tipo_cliente, cuenta_bancaria, referencia) VALUES ?`,
+                        [values_prepago],
+                        (err, res) => {
+                            if (err) {
+                                throw(err);
+                            }
+                        })}
                 
     
              }
