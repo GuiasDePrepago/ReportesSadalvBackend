@@ -557,6 +557,24 @@ app.post('/errores', async (req, res) => {
          const cliente_prepago_id = req.body.cliente_prepago_id || null;
          const credito_monto_depositado = req.body.credito_monto_depositado; 
          const credito_estado = req.body.credito_estado;
+        let generadorId = 0;
+
+        if (generador == "ALEJANDRA IBARRA") {
+            generadorId = 5;
+            return
+        }
+        if (generador == "MICHELL") {
+            generadorId = 3;
+            return
+        }
+        if (generador == "CITLALLI ROCHA") {
+            generadorId = 8;
+            return
+        } 
+        if (generador == "ERICK GARCIA") {
+            generadorId = 4;
+            return
+        } 
 
          try {
 
@@ -590,6 +608,9 @@ app.post('/errores', async (req, res) => {
                      monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
                      costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, cliente_prepago_id, credito_monto_depositado, credito_estado]]
                  
+                const values_prepago = [cliente_prepago_id, fecha_creacion, costo_guia[i], generadorId, 'Creacion Guia', codigo_confirmacion[i],
+                                        'prepago', null, null];
+
                 db.query(
                      `INSERT INTO reporte 
                      (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
@@ -602,8 +623,15 @@ app.post('/errores', async (req, res) => {
                          if (err) {
                              throw(err);
                          }
-        
-                         console.log('enviado con exito');
+                         if (cuenta_bancaria == 'PREPAGO') {
+                         db.query(`INSERT INTO saldos (id_cliente, fecha_creacion, monto, creado_por, tipo, observaciones,
+                            tipo_cliente, cuenta_bancaria, referencia) VALUES ?`,
+                            [values_prepago],
+                            (err, res) => {
+                                if (err) {
+                                    throw(err);
+                                }
+                            })}
                      }
                  );
                 
