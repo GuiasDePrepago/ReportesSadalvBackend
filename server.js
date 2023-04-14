@@ -610,8 +610,8 @@ app.post('/errores', async (req, res) => {
                      monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
                      costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, cliente_prepago_id, credito_monto_depositado, credito_estado]]
                  
-                const values_prepago = [cliente_prepago_id, fecha_creacion, costo_guia[i], generadorId, 'Creacion Guia', codigo_confirmacion[i],
-                                        'prepago', null, null];
+                const values_prepago = [[cliente_prepago_id, fecha_creacion, costo_guia[i], generadorId, 'Creacion Guia', codigo_confirmacion[i],
+                                        'prepago', null, null]];
 
                 db.query(
                      `INSERT INTO reporte 
