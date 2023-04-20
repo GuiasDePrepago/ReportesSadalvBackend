@@ -66,7 +66,7 @@ app.post('/login', (req, res) => {
 
 app.get('/generadores', (req, res) => {
     db.query(
-        "SELECT * FROM generadores WHERE activo = 1",
+        "SELECT * FROM generadores WHERE activo = 1 ORDER BY generador",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -82,7 +82,7 @@ app.get('/generadores', (req, res) => {
 
 app.get('/vendedores', (req, res) => {
     db.query(
-        "SELECT * FROM vendedores WHERE activo = 1",
+        "SELECT * FROM vendedores WHERE activo = 1 ORDER BY vendedor",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -98,7 +98,7 @@ app.get('/vendedores', (req, res) => {
 
 app.get('/cuentasBancarias', (req, res) => {
     db.query(
-        "SELECT * FROM cuentas_bancarias WHERE activo = 1",
+        "SELECT * FROM cuentas_bancarias WHERE activo = 1 ORDER BY cuenta_bancaria",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -114,7 +114,7 @@ app.get('/cuentasBancarias', (req, res) => {
 
 app.get('/clientesCredito', (req, res) => {
     db.query(
-        "SELECT * FROM clientes_credito WHERE activo = 1",
+        "SELECT * FROM clientes_credito WHERE activo = 1 ORDER BY cliente",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -130,7 +130,7 @@ app.get('/clientesCredito', (req, res) => {
 
 app.get('/clientesPrepago', (req, res) => {
     db.query(
-        "SELECT * FROM clientes_prepago",
+        "SELECT * FROM clientes_prepago ORDER BY cliente_prepago",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -146,7 +146,7 @@ app.get('/clientesPrepago', (req, res) => {
 
 app.get('/clientesFacturacion', (req, res) => {
     db.query(
-        "SELECT * FROM clientes_facturacion WHERE activo = 1",
+        "SELECT * FROM clientes_facturacion WHERE activo = 1 ORDER BY razon_social",
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -491,9 +491,6 @@ app.post('/errores', async (req, res) => {
      })
      idCargaArchivos = Object.values(getIdCargaArchivos[0])[0] + 1;
 
-     console.log(kilos[0].slice(0, -2));
-     console.log(costoGuia);
-
      res.status(200).send({
          codigo_confirmacion: numerosConfirmacion, 
          kilos: kilos,
@@ -576,86 +573,62 @@ app.post('/errores', async (req, res) => {
             
         } 
 
-        console.log(generadorId)
-
-         try {
-
-            let checkRepeated = [];
 
                 db.query(
-                    `SELECT * FROM reporte WHERE codigo_confirmacion = ?;`,
-                    codigo_confirmacion,
-                    (err, res) => {
+                    `SELECT * FROM reporte WHERE codigo_confirmacion in (?);`,
+                    [codigo_confirmacion],
+                    (err, response) => {
                         if (err) {
                             console.log(err);
+                        } if (response.length > 0){
+                            res.status(202).send({
+                                message: "checkRepeated"
+                            })
+                        } else {
+                            for (let i = 0; i < codigo_confirmacion.length; i++) {
+                                if (i >= 1) {
+                                    monto_deposito = '0.00'
+                                }
+                    
+                                 const values = [[codigo_confirmacion[i], kilos[i], vendedor, cuenta[i], nombre_archivo, fecha_creacion, 
+                                     fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia[i], generador, empresa, cuenta_bancaria, referencia,
+                                     monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
+                                     costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, cliente_prepago_id, credito_monto_depositado, credito_estado]]
+                                 
+                                const values_prepago = [[cliente_prepago_id, fecha_creacion, costo_guia[i], generadorId, 'Creacion Guia', codigo_confirmacion[i],
+                                                        'prepago', null, null]];
+                
+                                db.query(
+                                     `INSERT INTO reporte 
+                                     (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
+                                     fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
+                                     empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
+                                     razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
+                                     cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, id_cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
+                                     [values],
+                                     (err, res) => {
+                                         if (err) {
+                                             throw(err);
+                                         }
+                                     }
+                                 );
+                
+                                  if (cuenta_bancaria == 'PREPAGO') {
+                                     db.query(`INSERT INTO saldos (id_cliente, fecha_creacion, monto, creado_por, tipo, observaciones,
+                                        tipo_cliente, cuenta_bancaria, referencia) VALUES ?`,
+                                        [values_prepago],
+                                        (err, res) => {
+                                            if (err) {
+                                                throw(err);
+                                            }
+                                        })}
+                             }
+                             res.status(200).send({
+                                message: 'exito'
+                            });
                         }
-                        setValue(res);
                     }
                 );
-
-                function setValue(value) {
-                    checkRepeated = value;
-                  }
-            
-            console.log(checkRepeated)
-            
-            if (checkRepeated.length < 1) {
-             for (let i = 0; i < codigo_confirmacion.length; i++) {
-                if (i >= 1) {
-                    monto_deposito = '0.00'
-                }
-    
-                 const values = [[codigo_confirmacion[i], kilos[i], vendedor, cuenta[i], nombre_archivo, fecha_creacion, 
-                     fecha_creacion, fecha_creacion, '' + idCargaArchivos, tipo_guia[i], generador, empresa, cuenta_bancaria, referencia,
-                     monto_deposito, '0:00', reexpedicion[i]? 'Si':'No', factura, razon_social, remitente[i], guia_base[i],kilos_adicionales[i], comentarios,
-                     costo_guia[i], credito, cliente_credito, (reexpedicion[i] == false)? '0.00' : costo_reexpedicion[i], destinatario[i], cliente_prepago, cliente_prepago_id, credito_monto_depositado, credito_estado]]
-                 
-                const values_prepago = [[cliente_prepago_id, fecha_creacion, costo_guia[i], generadorId, 'Creacion Guia', codigo_confirmacion[i],
-                                        'prepago', null, null]];
-
-                db.query(
-                     `INSERT INTO reporte 
-                     (codigo_confirmacion, kilos, vendedor, cuenta, nombre_archivo, fecha_creacion,
-                     fecha_actualizacion, fecha_vendedor, id_carga_archivos, tipo_guia, generador, 
-                     empresa, cuenta_bancaria, referencia, monto_deposito, hora, reexpedicion, facturar,
-                     razon_social, remitente, guia_base, kilos_adicionales, comentarios, costo_guia, credito,
-                     cliente_credito, costo_reexpedicion, destinatario, cliente_prepago, id_cliente_prepago, credito_monto_depositado, credito_estado ) VALUES ?`,
-                     [values],
-                     (err, res) => {
-                         if (err) {
-                             throw(err);
-                         }
-                     }
-                 );
-
-                  if (cuenta_bancaria == 'PREPAGO') {
-                     db.query(`INSERT INTO saldos (id_cliente, fecha_creacion, monto, creado_por, tipo, observaciones,
-                        tipo_cliente, cuenta_bancaria, referencia) VALUES ?`,
-                        [values_prepago],
-                        (err, res) => {
-                            if (err) {
-                                throw(err);
-                            }
-                        })}
-                
-    
-             }
-            
-            
-             res.status(200).send({
-                 message: 'exito'
-                
-             });
-            } else {
-                res.status(202).send({
-                    message: "checkRepeated"
-                })
-            }
-         } 
-
-         catch (error){
-             console.log(error)
-         }
 
      })
 
