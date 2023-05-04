@@ -216,7 +216,8 @@ app.post('/errores', async (req, res) => {
      let pdfText = await getPDF('guia.pdf');
 
      let regexRemitente = /(?<=Vigencia de guía:\s).*[^0-9]/g;
-     let regexDestinatario = /(?<=\n[0-9]{4}\s).*/g
+     let regexRemitenteTermicas = /(?<=R\nM\nT\nE\s).*[^0-9]/g;
+     let regexDestinatario = /(?<=\n[0-9]{4}\s).*/g;
      let regexConfirmacion = /\w{10}-\w{12}/g;
      let regexKilos = /.*KG/g;
 
@@ -230,6 +231,12 @@ app.post('/errores', async (req, res) => {
      guiaBase = numerosConfirmacion.map(s => s.slice(1, 3).replace('0', ''));
 
      remitente = ([...pdfText.matchAll(regexRemitente)].toString().split(','));
+     
+     if (remitente[0] == '' ) {
+        remitente = ([...pdfText.matchAll(regexRemitenteTermicas)].toString().split(','));
+     }
+
+     console.log(remitente)
      destinatario = ([...pdfText.matchAll(regexDestinatario)].toString().split(','));
      kilos = await ([...pdfText.matchAll(regexKilos)].toString().replaceAll(' KG', '').split(','));
 
