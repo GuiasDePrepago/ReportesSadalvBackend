@@ -6,6 +6,7 @@ const fs = require('fs')
 const pdfParse = require('pdf-parse')
 const base64 = require('base64topdf');
 const util = require('util');
+const bodyParser = require("body-parser");
 require('dotenv').config();
 
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 app.use(cors());
+app.use(bodyParser.json());
 
 const db = mysql.createPool({
     host: process.env.DB_HOST,
@@ -138,6 +140,33 @@ app.get('/clientesPrepago', (req, res) => {
 
             if (result.length > 0) {
                 res.status(200).json(result);
+            }
+            
+        }    
+    )
+});
+
+app.get('/saldos/:id', (req, res) => {
+    db.query(
+        "SELECT * FROM saldos WHERE id_cliente= ?",
+        req.params.id,
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } 
+
+            if (result.length > 0) {
+                let balance = 0;
+                result.map(saldo => {
+                    if (saldo.tipo == 'Abono') {
+                        return balance = balance + saldo?.monto;
+                    } else {
+                        return balance = balance - saldo?.monto
+                    }
+                }) 
+
+                console.log(balance)
+                res.status(200).json(balance);
             }
             
         }    
